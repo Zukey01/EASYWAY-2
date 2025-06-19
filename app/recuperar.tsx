@@ -1,36 +1,113 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from './App'
-import { useNavigation } from '@react-navigation/native'
-import { TextInput } from 'react-native-gesture-handler'
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from './App';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-export default function recuperar() {
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-    
+export default function Recuperar() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const [reason, setReason] = useState('');
+  const [email, setEmail] = useState('');
 
   return (
-    <View style={styles.maincontainer}>
-
-        <Image source={require('../assets/images/logo.png')} style={styles.logo} resizeMode="contain" />
-        <Text style={styles.title}>Recuperar contraseña</Text>
-        <Text style={styles.text1}>Olvidaste la contraseña de </Text><Text style={styles.texteasy}>¡Easy Way!</Text><Text style={styles.text3}>Por favor introduce tu nombre de usuario o email</Text>
-        <Text style={styles.title}>Nombre de usuario o email</Text>
-        <TextInput placeholder="email@example.com" style={styles.input} placeholderTextColor="black" secureTextEntry />
-        <Text>Te enviaremos un codigo para la recuperacion de tu contraseña</Text>
-        <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Continuar</Text>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <Icon name="arrow-back" size={28} color="#0B7D03" />
         </TouchableOpacity>
-    </View>
-  )
+        <Text style={styles.title}>Recuperar Contraseña</Text>
+        <Text style={styles.label}>Correo electrónico</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Introduce tu correo"
+          placeholderTextColor="#666"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+        <Text style={styles.label}>¿Por qué deseas cambiar o recuperar tu contraseña?</Text>
+        <TextInput
+          style={[styles.input, { height: 80 }]}
+          placeholder="Escribe tu razón aquí..."
+          placeholderTextColor="#666"
+          value={reason}
+          onChangeText={setReason}
+          multiline
+        />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('nuevaContraseña')}
+        >
+          <Text style={styles.buttonText}>Nueva contraseña</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
-    logo: { width: 100, height: 100, resizeMode: 'contain', marginBottom: 10 },
-    maincontainer:{ flex: 1, padding: 20, paddingTop: 50, backgroundColor: '#fff', alignItems: 'center'},
-    title: { fontSize: 27, fontWeight: 'bold' },
-    texteasy: { fontWeight: 'bold', color: '#F5A623' },
-    input: { width: '100%', height: 60, backgroundColor: '#CCE8D0', borderRadius: 8, paddingHorizontal: 15, color: 'black', marginTop: 5, marginVertical:12, borderColor: 'black' },
-    button: { marginTop: 30, backgroundColor: '#00712D', paddingVertical: 15, paddingHorizontal: 40, borderRadius: 25, width: '100%', alignItems: 'center' },
-    buttonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
-})
+  scrollContainer: {
+    flexGrow: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+  },
+  container: {
+    flex: 1,
+    padding: 24,
+    alignItems: 'center',
+    maxWidth: 400,
+    alignSelf: 'center',
+    width: '100%',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 10,
+    left: 0,
+    zIndex: 10,
+    backgroundColor: 'transparent',
+    padding: 5,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 24,
+    color: '#0B7D03',
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    alignSelf: 'flex-start',
+    marginTop: 10,
+    marginBottom: 4,
+    color: '#222',
+  },
+  input: {
+    width: '100%',
+    backgroundColor: '#e6f4ea',
+    borderRadius: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    fontSize: 16,
+    marginBottom: 10,
+    color: '#222',
+  },
+  button: {
+    backgroundColor: '#0B7D03',
+    paddingVertical: 14,
+    borderRadius: 25,
+    marginTop: 20,
+    width: '100%',
+    alignItems: 'center',
+    maxWidth: 350,
+    alignSelf: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 17,
+    fontWeight: '600',
+  },
+});
